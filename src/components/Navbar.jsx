@@ -47,13 +47,13 @@ export default function Navbar() {
           {/* Logo */}
           <a
             href="#home"
-            className="flex items-center gap-2 group transition-opacity hover:opacity-90"
+            className="flex items-center gap-2 group transition-opacity duration-200 hover:opacity-95"
             aria-label="Rayan.dev home"
           >
-            <span className="text-violet-500 text-xl font-bold tracking-tight transition-transform group-hover:scale-105">
+            <span className="text-violet-500 text-xl font-bold tracking-tight inline-block transition-all duration-[250ms] ease-out group-hover:rotate-[5deg] group-hover:scale-[1.02] group-hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.45)]">
               &lt;/&gt;
             </span>
-            <span className="text-white font-semibold text-lg tracking-tight">
+            <span className="text-white font-semibold text-lg tracking-tight transition-colors duration-200 group-hover:text-white/95">
               Rayan.dev
             </span>
           </a>

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { handleSpotlightMouseMove } from '../utils/spotlight';
 
 export default function ProjectCard({ project, index = 0 }) {
   const [activeThumbnail, setActiveThumbnail] = useState(1);
@@ -46,9 +47,10 @@ export default function ProjectCard({ project, index = 0 }) {
   return (
     <div
       ref={cardRef}
-      className={`section-reveal ${
+      onMouseMove={handleSpotlightMouseMove}
+      className={`spotlight-card section-reveal ${
         isVisible ? 'visible' : ''
-      } rounded-3xl border border-white/[0.08] bg-white/[0.02] overflow-hidden transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.03]`}
+      } group rounded-3xl border border-white/[0.08] bg-white/[0.02] overflow-hidden transition-all duration-[400ms] ease-out hover:border-white/[0.15] hover:bg-white/[0.03] hover:-translate-y-[2px]`}
       style={{ transitionDelay: `${index * 120}ms` }}
     >
       {/* Card Header */}
@@ -105,7 +107,7 @@ export default function ProjectCard({ project, index = 0 }) {
         >
           <div className="relative aspect-[16/9] sm:aspect-[21/9]">
             {/* Browser-like frame */}
-            <div className="absolute inset-3 sm:inset-6 lg:inset-8 rounded-lg sm:rounded-xl bg-[#0a0a0f] border border-white/15 overflow-hidden shadow-2xl flex flex-col">
+            <div className="absolute inset-3 sm:inset-6 lg:inset-8 rounded-lg sm:rounded-xl bg-[#0a0a0f] border border-white/15 overflow-hidden shadow-2xl transition-shadow duration-[400ms] ease-out group-hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8),0_0_24px_rgba(139,92,246,0.12)] flex flex-col">
               {/* Browser Window Chrome */}
               <div className="h-7 sm:h-8 bg-black/60 border-b border-white/10 px-3 sm:px-4 flex items-center justify-between shrink-0 select-none">
                 <div className="flex items-center gap-1.5">
@@ -127,7 +129,7 @@ export default function ProjectCard({ project, index = 0 }) {
                   key={activeThumb.file}
                   src={`${project.basePath}${activeThumb.file}`}
                   alt={`${project.name} — ${activeThumb.label} view`}
-                  className="w-full h-full object-cover object-top animate-in fade-in duration-300"
+                  className="w-full h-full object-cover object-top animate-in fade-in duration-300 transition-transform duration-[400ms] ease-out group-hover:scale-[1.02]"
                   loading="eager"
                 />
               </div>

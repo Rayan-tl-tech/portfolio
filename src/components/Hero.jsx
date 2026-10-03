@@ -49,13 +49,15 @@ export default function Hero() {
         <div className="order-2 lg:order-1">
           {/* Status Indicator */}
           <div className="reveal-line flex items-center gap-2.5 mb-8 sm:mb-10">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
-            </span>
-            <span className="text-[11px] sm:text-xs font-medium tracking-[0.2em] text-white/70 uppercase">
-              Available for selected projects
-            </span>
+            <div className="badge-shimmer inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03]">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
+              </span>
+              <span className="text-[11px] sm:text-xs font-medium tracking-[0.2em] text-white/80 uppercase">
+                Available for selected projects
+              </span>
+            </div>
           </div>
 
           {/* Main Headline */}

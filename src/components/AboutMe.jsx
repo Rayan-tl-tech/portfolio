@@ -17,7 +17,7 @@ export default function AboutMe() {
           observer.disconnect();
         }
       },
-      { threshold: 0.05, rootMargin: '120px' }
+      { threshold: 0.2 }
     );
 
     if (sectionRef.current) {
@@ -85,7 +85,12 @@ export default function AboutMe() {
                     key={item.number}
                     className={`flex items-center gap-4 py-6 border-b border-white/10 ${
                       idx % 2 === 0 ? 'sm:border-r sm:border-white/10 sm:pr-8' : 'sm:pl-8'
+                    } transition-all duration-[600ms] ease-out ${
+                      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'
                     }`}
+                    style={{
+                      transitionDelay: isVisible ? `${idx * 80}ms` : '0ms',
+                    }}
                   >
                     <span className="text-sm text-violet-500 font-mono font-medium">
                       {item.number}

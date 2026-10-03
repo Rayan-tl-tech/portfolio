@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { handleSpotlightMouseMove } from '../utils/spotlight';
 
 export default function Services() {
   const sectionRef = useRef(null);
@@ -17,7 +18,7 @@ export default function Services() {
           observer.disconnect();
         }
       },
-      { threshold: 0.05, rootMargin: '120px' }
+      { threshold: 0.2 }
     );
 
     if (sectionRef.current) {
@@ -133,10 +134,16 @@ export default function Services() {
 
           {/* Service Cards Grid */}
           <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
-            {services.map((service) => (
+            {services.map((service, idx) => (
               <div
                 key={service.number}
-                className="service-card relative rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 sm:p-10 overflow-hidden group cursor-default transition-all duration-300 hover:border-violet-500/30 shadow-lg"
+                onMouseMove={handleSpotlightMouseMove}
+                className={`service-card spotlight-card relative rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 sm:p-10 overflow-hidden group cursor-default transition-all duration-[600ms] ease-out hover:border-violet-500/30 shadow-lg ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'
+                }`}
+                style={{
+                  transitionDelay: isVisible ? `${idx * 100}ms` : '0ms',
+                }}
               >
                 {/* Subtle Grid texture */}
                 <div

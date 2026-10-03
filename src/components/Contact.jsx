@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { handleSpotlightMouseMove } from '../utils/spotlight';
 
 export default function Contact() {
   const sectionRef = useRef(null);
+  const magneticWrapperRef = useRef(null);
+  const magneticBtnRef = useRef(null);
+  const magneticArrowRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -26,6 +30,45 @@ export default function Contact() {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleMagneticMove = (e) => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!magneticWrapperRef.current || !magneticBtnRef.current) return;
+
+    const rect = magneticWrapperRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const deltaX = e.clientX - centerX;
+    const deltaY = e.clientY - centerY;
+
+    // Subtle magnetic attraction: max 8px for circular button, max 12px for arrow icon
+    const pullX = Math.max(-8, Math.min(8, deltaX * 0.18));
+    const pullY = Math.max(-8, Math.min(8, deltaY * 0.18));
+
+    const arrowX = Math.max(-12, Math.min(12, deltaX * 0.28));
+    const arrowY = Math.max(-12, Math.min(12, deltaY * 0.28));
+
+    magneticBtnRef.current.style.transform = `translate3d(${pullX}px, ${pullY}px, 0)`;
+    magneticBtnRef.current.style.transition = 'transform 0.1s ease-out';
+
+    if (magneticArrowRef.current) {
+      magneticArrowRef.current.style.transform = `translate3d(${arrowX}px, ${arrowY}px, 0)`;
+      magneticArrowRef.current.style.transition = 'transform 0.1s ease-out';
+    }
+  };
+
+  const handleMagneticLeave = () => {
+    if (!magneticBtnRef.current) return;
+    magneticBtnRef.current.style.transform = 'translate3d(0, 0, 0)';
+    magneticBtnRef.current.style.transition = 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)';
+
+    if (magneticArrowRef.current) {
+      magneticArrowRef.current.style.transform = 'translate3d(0, 0, 0)';
+      magneticArrowRef.current.style.transition = 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)';
+    }
+  };
 
   const contactLinks = [
     {
@@ -128,27 +171,37 @@ export default function Contact() {
               <span className="block text-violet-500">in mind?</span>
             </h2>
 
-            {/* Large circular CTA button */}
-            <a
-              href="mailto:rayan.taleb.dev@gmail.com"
-              className="cta-circle flex-shrink-0 flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-violet-600 hover:bg-violet-500 text-white shadow-xl shadow-violet-600/30"
-              aria-label="Send email to Rayan Taleb"
+            {/* Large circular CTA button with subtle magnetic tracking */}
+            <div
+              ref={magneticWrapperRef}
+              onMouseMove={handleMagneticMove}
+              onMouseLeave={handleMagneticLeave}
+              className="relative p-2 -m-2 flex items-center justify-center"
             >
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
+              <a
+                ref={magneticBtnRef}
+                href="mailto:rayan.taleb.dev@gmail.com"
+                className="cta-circle flex-shrink-0 flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-violet-600 hover:bg-violet-500 text-white shadow-xl shadow-violet-600/30 will-change-transform"
+                aria-label="Send email to Rayan Taleb"
               >
-                <path d="M7 17L17 7" />
-                <path d="M7 7h10v10" />
-              </svg>
-            </a>
+                <svg
+                  ref={magneticArrowRef}
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className="will-change-transform"
+                >
+                  <path d="M7 17L17 7" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </a>
+            </div>
           </div>
 
           {/* Subtitle + Secondary CTA Button */}
@@ -188,14 +241,15 @@ export default function Contact() {
                   href={link.href}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className={`contact-link flex items-center gap-4 px-6 py-8 ${
+                  onMouseMove={handleSpotlightMouseMove}
+                  className={`spotlight-card contact-link flex items-center gap-4 px-6 py-8 ${
                     index < contactLinks.length - 1 ? 'lg:border-r' : ''
                   } ${index < 2 ? 'sm:border-b lg:border-b-0' : ''} border-white/10`}
                 >
-                  <div className="contact-icon-box flex items-center justify-center w-12 h-12 rounded-xl border border-white/10 bg-white/[0.03] text-white/80 flex-shrink-0">
+                  <div className="contact-icon-box relative z-10 flex items-center justify-center w-12 h-12 rounded-xl border border-white/10 bg-white/[0.03] text-white/80 flex-shrink-0">
                     {link.icon}
                   </div>
-                  <div className="min-w-0">
+                  <div className="relative z-10 min-w-0">
                     <div className="text-white font-medium text-sm sm:text-base">
                       {link.label}
                     </div>
