@@ -1,5 +1,6 @@
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import SelectedWork from './components/SelectedWork';
 
 export default function App() {
   return (
@@ -7,6 +8,7 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
+        <SelectedWork />
       </main>
     </div>
   );

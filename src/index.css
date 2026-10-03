@@ -23,6 +23,14 @@ body {
   background-position: center center;
 }
 
+.project-grid-pattern {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.14) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center center;
+}
+
 .reveal-line {
   opacity: 0;
   transform: translateY(24px);
@@ -56,8 +64,31 @@ body {
   }
 }
 
+.section-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.thumbnail-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+.thumbnail-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+.thumbnail-scroll::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.4);
+  border-radius: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .reveal-line, .portrait-enter {
+  .reveal-line, .portrait-enter, .section-reveal {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
