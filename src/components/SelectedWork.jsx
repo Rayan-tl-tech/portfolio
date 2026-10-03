@@ -7,6 +7,11 @@ export default function SelectedWork() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (!('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -14,7 +19,7 @@ export default function SelectedWork() {
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: '120px' }
     );
 
     if (sectionRef.current) {
@@ -25,7 +30,7 @@ export default function SelectedWork() {
   }, []);
 
   return (
-    <section id="work" className="relative py-20 sm:py-32 px-4 sm:px-6 lg:px-8">
+    <section id="work" className="relative py-20 sm:py-32 px-4 sm:px-6 lg:px-8 scroll-mt-24 sm:scroll-mt-32">
       <div className="mx-auto max-w-7xl">
         {/* Section Header */}
         <div
@@ -52,8 +57,8 @@ export default function SelectedWork() {
 
         {/* Project Cards List */}
         <div className="space-y-12 sm:space-y-16">
-          {projects.map((project) => (
-            <ProjectCard key={project.number} project={project} />
+          {projects.map((project, index) => (
+            <ProjectCard key={project.number} project={project} index={index} />
           ))}
         </div>
       </div>

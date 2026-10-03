@@ -1,8 +1,33 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
-export default function ProjectCard({ project }) {
+export default function ProjectCard({ project, index = 0 }) {
   const [activeThumbnail, setActiveThumbnail] = useState(1);
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
   const thumbnailScrollRef = useRef(null);
+
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.05, rootMargin: '120px' }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleThumbnailClick = (id) => {
     setActiveThumbnail(id);
@@ -16,7 +41,13 @@ export default function ProjectCard({ project }) {
   };
 
   return (
-    <div className="section-reveal rounded-3xl border border-white/[0.08] bg-white/[0.02] overflow-hidden transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.03]">
+    <div
+      ref={cardRef}
+      className={`section-reveal ${
+        isVisible ? 'visible' : ''
+      } rounded-3xl border border-white/[0.08] bg-white/[0.02] overflow-hidden transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.03]`}
+      style={{ transitionDelay: `${index * 120}ms` }}
+    >
       {/* Card Header */}
       <div className="p-6 sm:p-10 lg:p-12">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
@@ -66,16 +97,16 @@ export default function ProjectCard({ project }) {
 
       {/* Main Preview Container */}
       <div className="px-4 sm:px-6 lg:px-8 pb-4">
-        <div className={`relative rounded-t-2xl sm:rounded-t-3xl ${project.bgColor} project-grid-pattern overflow-hidden`}>
+        <div
+          className={`relative rounded-t-2xl sm:rounded-t-3xl ${project.bgColor} project-grid-pattern overflow-hidden`}
+        >
           <div className="relative aspect-[16/9] sm:aspect-[21/9]">
             {/* Browser-like frame */}
             <div className="absolute inset-3 sm:inset-6 lg:inset-8 rounded-lg sm:rounded-xl bg-[#0a0a0f] border border-white/15 overflow-hidden shadow-2xl flex flex-col">
-              
-              {/* Browser Window Chrome / Header Bar */}
+              {/* Browser Window Content */}
               {project.previewType === 'maison-ember' ? (
-                /* Maison Ember Live Preview Simulation */
+                /* Maison Ember Live Preview */
                 <div className="relative w-full h-full overflow-hidden flex flex-col justify-between p-4 sm:p-6 lg:p-8 bg-[#121110]">
-                  {/* Background Hearth Image */}
                   <img
                     src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1920&q=80"
                     alt="Maison Ember Culinary Presentation"
@@ -128,12 +159,16 @@ export default function ProjectCard({ project }) {
 
                   {/* Bottom Meta inside frame */}
                   <div className="relative z-10 flex items-center justify-between text-[10px] text-white/40">
-                    <span className="font-mono">Page: {project.thumbnails.find(t => t.id === activeThumbnail)?.label || 'Hero'}</span>
-                    <span className="hidden sm:inline uppercase tracking-widest text-[9px]">Scroll to discover</span>
+                    <span className="font-mono">
+                      Page: {project.thumbnails.find((t) => t.id === activeThumbnail)?.label || 'Hero'}
+                    </span>
+                    <span className="hidden sm:inline uppercase tracking-widest text-[9px]">
+                      Scroll to discover
+                    </span>
                   </div>
                 </div>
               ) : (
-                /* Shoplify Live Preview Simulation */
+                /* Shoplify Live Preview */
                 <div className="relative w-full h-full overflow-hidden flex flex-col justify-between p-4 sm:p-6 lg:p-8 bg-[#0b0f19]">
                   {/* Top Bar inside frame */}
                   <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-3">
@@ -141,9 +176,7 @@ export default function ProjectCard({ project }) {
                       <span className="bg-indigo-600 text-white text-xs px-2 py-1 rounded font-bold">
                         🛍
                       </span>
-                      <span className="text-white font-bold text-sm tracking-tight">
-                        Shopify
-                      </span>
+                      <span className="text-white font-bold text-sm tracking-tight">Shopify</span>
                       <span className="ml-2 bg-indigo-500/20 text-indigo-300 text-[10px] px-2 py-0.5 rounded-full font-medium hidden sm:inline">
                         Shop
                       </span>
@@ -181,7 +214,7 @@ export default function ProjectCard({ project }) {
                         </span>
                       </div>
                     </div>
-                    
+
                     {/* Featured Product Graphic (Gaming Setup) */}
                     <div className="relative rounded-lg overflow-hidden border border-white/10 bg-slate-900/80 aspect-video flex items-center justify-center shadow-lg">
                       <div className="absolute inset-0 bg-gradient-to-tr from-indigo-950 via-slate-900 to-black opacity-90" />
@@ -197,8 +230,12 @@ export default function ProjectCard({ project }) {
 
                   {/* Bottom Meta inside frame */}
                   <div className="relative z-10 flex items-center justify-between text-[10px] text-white/40">
-                    <span className="font-mono">View: {project.thumbnails.find(t => t.id === activeThumbnail)?.label || 'Home'}</span>
-                    <span className="text-[9px] uppercase tracking-widest text-indigo-400/70">Interactive Demo</span>
+                    <span className="font-mono">
+                      View: {project.thumbnails.find((t) => t.id === activeThumbnail)?.label || 'Home'}
+                    </span>
+                    <span className="text-[9px] uppercase tracking-widest text-indigo-400/70">
+                      Interactive Demo
+                    </span>
                   </div>
                 </div>
               )}
