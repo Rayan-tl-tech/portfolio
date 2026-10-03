@@ -2,19 +2,36 @@ import { useState, useEffect } from 'react';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+
+      const sections = ['home', 'work', 'about', 'services', 'contact'];
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 200 && rect.bottom >= 150) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { label: 'Work', href: '#work', active: true },
-    { label: 'About', href: '#about' },
-    { label: 'Services', href: '#services' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Work', href: '#work', section: 'work' },
+    { label: 'About', href: '#about', section: 'about' },
+    { label: 'Services', href: '#services', section: 'services' },
+    { label: 'Contact', href: '#contact', section: 'contact' },
   ];
 
   return (
@@ -22,8 +39,8 @@ export default function Navbar() {
       <div
         className={`mx-auto max-w-7xl rounded-2xl border transition-all duration-300 ${
           scrolled || mobileMenuOpen
-            ? 'border-white/10 bg-black/70 backdrop-blur-xl shadow-2xl shadow-black/40'
-            : 'border-white/[0.08] bg-black/20 backdrop-blur-md'
+            ? 'border-white/10 bg-black/75 backdrop-blur-xl shadow-2xl shadow-black/50'
+            : 'border-white/[0.08] bg-black/25 backdrop-blur-md'
         }`}
       >
         <div className="flex items-center justify-between px-5 sm:px-8 py-4">
@@ -41,25 +58,28 @@ export default function Navbar() {
             </span>
           </a>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation Links with Active Scroll Indicator */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className={`relative text-sm font-medium transition-colors duration-200 pb-1 ${
-                  link.active ? 'text-white' : 'text-white/60 hover:text-white'
-                }`}
-              >
-                {link.label}
-                {link.active && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-violet-500 rounded-full" />
-                )}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.section;
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className={`relative text-sm font-medium transition-colors duration-200 pb-1 ${
+                    isActive ? 'text-white' : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  {link.label}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-violet-500 rounded-full animate-in fade-in zoom-in-95 duration-200" />
+                  )}
+                </a>
+              );
+            })}
           </div>
 
-          {/* Desktop CTA Button */}
+          {/* CTA Button */}
           <a
             href="#contact"
             className="hidden sm:inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-violet-600/20"
@@ -84,7 +104,7 @@ export default function Navbar() {
           {/* Mobile Menu Toggle Button */}
           <button
             type="button"
-            className="md:hidden text-white/80 hover:text-white p-2 rounded-lg hover:bg-white/5 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+            className="md:hidden text-white/80 hover:text-white p-2 rounded-lg hover:bg-white/5 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500/50 cursor-pointer"
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileMenuOpen}
             onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -107,18 +127,21 @@ export default function Navbar() {
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-white/10 px-5 py-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`py-2 text-base font-medium transition-colors ${
-                  link.active ? 'text-violet-400 font-semibold' : 'text-white/70 hover:text-white'
-                }`}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.section;
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`py-2 text-base font-medium transition-colors ${
+                    isActive ? 'text-violet-400 font-semibold' : 'text-white/70 hover:text-white'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
             <a
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}

@@ -23,6 +23,14 @@ body {
   background-position: center center;
 }
 
+.card-grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center center;
+}
+
 .project-grid-pattern {
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.14) 1px, transparent 1px),
@@ -67,7 +75,8 @@ body {
 .section-reveal {
   opacity: 0;
   transform: translateY(32px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
 }
 
 .section-reveal.visible {
@@ -87,10 +96,38 @@ body {
   border-radius: 2px;
 }
 
+.service-card {
+  transition: all 0.3s ease;
+}
+.service-card:hover {
+  background-color: rgba(139, 92, 246, 0.03);
+}
+.service-card:hover .service-icon {
+  background-color: rgba(139, 92, 246, 1);
+  border-color: rgba(139, 92, 246, 1);
+}
+.service-card:hover .service-icon svg {
+  color: #ffffff;
+}
+.service-card:hover .service-accent {
+  width: 100%;
+  background-color: rgba(139, 92, 246, 1);
+}
+
+.service-icon {
+  transition: all 0.3s ease;
+}
+.service-accent {
+  transition: all 0.4s ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal-line, .portrait-enter, .section-reveal {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+  .service-card, .service-icon, .service-accent {
+    transition: none !important;
   }
 }
