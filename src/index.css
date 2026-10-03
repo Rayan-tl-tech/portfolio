@@ -121,13 +121,41 @@ body {
   transition: all 0.4s ease;
 }
 
+.cta-circle {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cta-circle:hover {
+  transform: scale(1.05);
+  background-color: #a78bfa;
+}
+
+.contact-link {
+  transition: all 0.2s ease;
+}
+.contact-link:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+.contact-link:hover .contact-icon-box {
+  border-color: rgba(139, 92, 246, 0.5);
+  background-color: rgba(139, 92, 246, 0.1);
+}
+
+.contact-icon-box {
+  transition: all 0.2s ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal-line, .portrait-enter, .section-reveal {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
   }
-  .service-card, .service-icon, .service-accent {
+  .service-card,
+  .service-icon,
+  .service-accent,
+  .cta-circle,
+  .contact-link,
+  .contact-icon-box {
     transition: none !important;
   }
 }

@@ -3,6 +3,8 @@ import Hero from './components/Hero';
 import SelectedWork from './components/SelectedWork';
 import AboutMe from './components/AboutMe';
 import Services from './components/Services';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
 
 export default function App() {
   return (
@@ -13,7 +15,9 @@ export default function App() {
         <SelectedWork />
         <AboutMe />
         <Services />
+        <Contact />
       </main>
+      <Footer />
     </div>
   );
 }
