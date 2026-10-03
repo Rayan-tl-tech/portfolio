@@ -35,10 +35,13 @@ export default function ProjectCard({ project, index = 0 }) {
 
   const scrollThumbnails = (direction) => {
     if (thumbnailScrollRef.current) {
-      const scrollAmount = direction === 'left' ? -200 : 200;
+      const scrollAmount = direction === 'left' ? -220 : 220;
       thumbnailScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
+
+  const activeThumb =
+    project.thumbnails.find((t) => t.id === activeThumbnail) || project.thumbnails[0];
 
   return (
     <div
@@ -103,151 +106,40 @@ export default function ProjectCard({ project, index = 0 }) {
           <div className="relative aspect-[16/9] sm:aspect-[21/9]">
             {/* Browser-like frame */}
             <div className="absolute inset-3 sm:inset-6 lg:inset-8 rounded-lg sm:rounded-xl bg-[#0a0a0f] border border-white/15 overflow-hidden shadow-2xl flex flex-col">
-              {/* Browser Window Content */}
-              {project.previewType === 'maison-ember' ? (
-                /* Maison Ember Live Preview */
-                <div className="relative w-full h-full overflow-hidden flex flex-col justify-between p-4 sm:p-6 lg:p-8 bg-[#121110]">
-                  <img
-                    src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1920&q=80"
-                    alt="Maison Ember Culinary Presentation"
-                    className="absolute inset-0 w-full h-full object-cover opacity-60"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
-
-                  {/* Top Bar inside frame */}
-                  <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="border border-white/30 px-1.5 py-0.5 text-[10px] font-serif tracking-widest text-white">
-                        ME
-                      </div>
-                      <div>
-                        <div className="text-[11px] sm:text-xs font-semibold tracking-widest uppercase text-white">
-                          Maison Ember
-                        </div>
-                        <div className="text-[9px] tracking-wider text-white/50 uppercase">
-                          Restaurant Concept
-                        </div>
-                      </div>
-                    </div>
-                    <div className="hidden sm:flex items-center gap-6 text-xs text-white/70">
-                      <span className="text-white border-b border-white pb-0.5">Home</span>
-                      <span>Menu</span>
-                      <span>Contact</span>
-                    </div>
-                    <div className="text-[10px] sm:text-xs font-medium uppercase tracking-wider bg-[#b8623f] text-white px-3 py-1 rounded">
-                      Reserve ↗
-                    </div>
-                  </div>
-
-                  {/* Main Content inside frame */}
-                  <div className="relative z-10 my-auto max-w-xl py-4 sm:py-6">
-                    <div className="text-[9px] sm:text-[11px] font-medium tracking-[0.2em] uppercase text-white/70 mb-2">
-                      A Fictional Dining Concept
-                    </div>
-                    <h4
-                      className="text-white text-xl sm:text-3xl lg:text-4xl font-light leading-tight"
-                      style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
-                    >
-                      Where fire <span className="text-[#d88965] italic">finds finesse.</span>
-                    </h4>
-                    <p className="hidden sm:block text-xs sm:text-sm text-white/70 mt-3 line-clamp-2 max-w-md">
-                      A cinematic restaurant website concept, designed to turn culinary character into an unforgettable digital experience.
-                    </p>
-                  </div>
-
-                  {/* Bottom Meta inside frame */}
-                  <div className="relative z-10 flex items-center justify-between text-[10px] text-white/40">
-                    <span className="font-mono">
-                      Page: {project.thumbnails.find((t) => t.id === activeThumbnail)?.label || 'Hero'}
-                    </span>
-                    <span className="hidden sm:inline uppercase tracking-widest text-[9px]">
-                      Scroll to discover
-                    </span>
-                  </div>
+              {/* Browser Window Chrome */}
+              <div className="h-7 sm:h-8 bg-black/60 border-b border-white/10 px-3 sm:px-4 flex items-center justify-between shrink-0 select-none">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
                 </div>
-              ) : (
-                /* Shoplify Live Preview */
-                <div className="relative w-full h-full overflow-hidden flex flex-col justify-between p-4 sm:p-6 lg:p-8 bg-[#0b0f19]">
-                  {/* Top Bar inside frame */}
-                  <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-indigo-600 text-white text-xs px-2 py-1 rounded font-bold">
-                        🛍
-                      </span>
-                      <span className="text-white font-bold text-sm tracking-tight">Shopify</span>
-                      <span className="ml-2 bg-indigo-500/20 text-indigo-300 text-[10px] px-2 py-0.5 rounded-full font-medium hidden sm:inline">
-                        Shop
-                      </span>
-                    </div>
-                    <div className="hidden sm:flex items-center gap-5 text-xs text-white/60">
-                      <span>Orders</span>
-                      <span>Admin</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-white/60">
-                      <span className="w-5 h-5 rounded-full bg-indigo-500/30 flex items-center justify-center text-[10px] text-indigo-300">
-                        T
-                      </span>
-                      <span className="hidden sm:inline text-[11px]">test123</span>
-                    </div>
-                  </div>
-
-                  {/* Main Catalog Headline & Visual inside frame */}
-                  <div className="relative z-10 grid sm:grid-cols-2 gap-4 items-center my-auto py-2">
-                    <div>
-                      <span className="text-indigo-400 font-bold tracking-widest uppercase text-[9px] sm:text-[10px] mb-1 block">
-                        Premium Collection
-                      </span>
-                      <h4 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight tracking-tight">
-                        Discover products <span className="text-indigo-400">you'll love.</span>
-                      </h4>
-                      <p className="hidden sm:block text-xs sm:text-sm text-gray-400 mt-2 line-clamp-2">
-                        Curated selection of premium goods across every category. Designed for quality and performance.
-                      </p>
-                      <div className="mt-4 flex gap-2">
-                        <span className="bg-indigo-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium">
-                          Shop Catalog
-                        </span>
-                        <span className="border border-white/20 text-white/70 text-xs px-3 py-1.5 rounded-lg font-medium hidden sm:inline">
-                          Browse Deals
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Featured Product Graphic (Gaming Setup) */}
-                    <div className="relative rounded-lg overflow-hidden border border-white/10 bg-slate-900/80 aspect-video flex items-center justify-center shadow-lg">
-                      <div className="absolute inset-0 bg-gradient-to-tr from-indigo-950 via-slate-900 to-black opacity-90" />
-                      <div className="relative z-10 text-center p-3">
-                        <div className="w-12 h-12 mx-auto rounded-full bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center animate-pulse mb-2">
-                          <div className="w-6 h-6 rounded-full bg-cyan-400/80 blur-xs" />
-                        </div>
-                        <span className="text-[11px] font-mono text-cyan-300 block">ARGB Gaming Rig</span>
-                        <span className="text-[10px] text-white/50">High Performance Gear</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom Meta inside frame */}
-                  <div className="relative z-10 flex items-center justify-between text-[10px] text-white/40">
-                    <span className="font-mono">
-                      View: {project.thumbnails.find((t) => t.id === activeThumbnail)?.label || 'Home'}
-                    </span>
-                    <span className="text-[9px] uppercase tracking-widest text-indigo-400/70">
-                      Interactive Demo
-                    </span>
-                  </div>
+                <div className="text-[10px] sm:text-[11px] font-mono text-white/40 bg-white/5 px-3 py-0.5 rounded-md border border-white/5 truncate max-w-[200px] sm:max-w-xs">
+                  {project.name.toLowerCase().replace(/\s+/g, '-')}.concept
                 </div>
-              )}
+                <div className="text-[10px] sm:text-xs font-mono text-violet-400">
+                  {activeThumb.label}
+                </div>
+              </div>
+
+              {/* Main Screenshot Display */}
+              <div className="relative flex-1 w-full h-full overflow-hidden bg-[#0d0d12]">
+                <img
+                  key={activeThumb.file}
+                  src={`${project.basePath}${activeThumb.file}`}
+                  alt={`${project.name} — ${activeThumb.label} view`}
+                  className="w-full h-full object-cover object-top animate-in fade-in duration-300"
+                  loading="eager"
+                />
+              </div>
             </div>
 
             {/* Counter Badge */}
-            <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center gap-2 bg-black/70 backdrop-blur-md border border-white/10 rounded-full px-4 py-2 z-20">
-              <span className="text-sm font-medium text-white">
+            <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center gap-2 bg-black/75 backdrop-blur-md border border-white/15 rounded-full px-4 py-2 z-20 shadow-lg">
+              <span className="text-sm font-medium text-white font-mono">
                 {String(activeThumbnail).padStart(2, '0')}
               </span>
               <span className="text-white/40">/</span>
-              <span className="text-sm font-medium text-white/60">
+              <span className="text-sm font-medium text-white/60 font-mono">
                 {String(project.totalThumbnails).padStart(2, '0')}
               </span>
             </div>
@@ -266,22 +158,32 @@ export default function ProjectCard({ project, index = 0 }) {
               key={thumb.id}
               onClick={() => handleThumbnailClick(thumb.id)}
               type="button"
-              className={`relative flex-shrink-0 w-32 sm:w-40 aspect-video rounded-lg border-2 overflow-hidden transition-all duration-200 cursor-pointer ${
+              className={`group relative flex-shrink-0 w-32 sm:w-44 aspect-video rounded-lg border-2 overflow-hidden transition-all duration-200 cursor-pointer text-left ${
                 activeThumbnail === thumb.id
-                  ? 'border-violet-500 scale-[1.02] shadow-lg shadow-violet-500/20'
-                  : 'border-white/10 hover:border-white/25 bg-black/40'
+                  ? 'border-violet-500 scale-[1.02] shadow-lg shadow-violet-500/25 ring-2 ring-violet-500/20'
+                  : 'border-white/10 hover:border-white/30 bg-black/50 opacity-70 hover:opacity-100'
               }`}
               aria-label={`View ${thumb.label} screenshot`}
             >
-              {/* Thumbnail background */}
-              <div className={`absolute inset-0 ${project.bgColor} opacity-30`} />
-              <div className="absolute inset-0 flex items-center justify-center p-2 text-center">
-                <span className="text-white/80 text-xs font-medium line-clamp-1">
+              {/* Thumbnail Real Image */}
+              <img
+                src={`${project.basePath}${thumb.file}`}
+                alt={`${project.name} thumbnail ${thumb.id}`}
+                className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+              />
+              {/* Dark Gradient Overlay for text contrast */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
+
+              {/* Label */}
+              <div className="absolute bottom-1.5 left-2 right-8 pointer-events-none">
+                <span className="text-white text-[11px] font-medium line-clamp-1 drop-shadow-sm">
                   {thumb.label}
                 </span>
               </div>
-              {/* Number badge */}
-              <div className="absolute bottom-1.5 right-1.5 bg-black/70 backdrop-blur-xs rounded px-1.5 py-0.5 border border-white/10">
+
+              {/* Number Badge */}
+              <div className="absolute bottom-1.5 right-1.5 bg-black/80 backdrop-blur-xs rounded px-1.5 py-0.5 border border-white/15 pointer-events-none">
                 <span className="text-[10px] font-mono text-white/90">
                   {String(thumb.id).padStart(2, '0')}
                 </span>
@@ -295,7 +197,7 @@ export default function ProjectCard({ project, index = 0 }) {
           <button
             type="button"
             onClick={() => scrollThumbnails('left')}
-            className="text-white/30 hover:text-white transition-colors p-1"
+            className="text-white/30 hover:text-white transition-colors p-1 cursor-pointer"
             aria-label="Scroll thumbnails left"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -313,7 +215,7 @@ export default function ProjectCard({ project, index = 0 }) {
           <button
             type="button"
             onClick={() => scrollThumbnails('right')}
-            className="text-white/30 hover:text-white transition-colors p-1"
+            className="text-white/30 hover:text-white transition-colors p-1 cursor-pointer"
             aria-label="Scroll thumbnails right"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
