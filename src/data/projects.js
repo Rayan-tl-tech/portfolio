@@ -8,7 +8,7 @@ export const projects = [
     tech: 'React · Tailwind CSS',
     bgColor: 'bg-[#b8623f]',
     accentColor: '#b8623f',
-    projectUrl: '#',
+    projectUrl: 'https://restorant-showcase.vercel.app/',
     totalThumbnails: 9,
     basePath: '/projects/maison-ember/',
     thumbnails: [
@@ -32,7 +32,7 @@ export const projects = [
     tech: 'React · Tailwind CSS',
     bgColor: 'bg-[#4f46e5]',
     accentColor: '#4f46e5',
-    projectUrl: '#',
+    projectUrl: 'https://final-project-delta-gules-45.vercel.app/',
     totalThumbnails: 11,
     basePath: '/projects/shoplify/',
     thumbnails: [
