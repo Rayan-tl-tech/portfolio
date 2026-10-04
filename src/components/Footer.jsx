@@ -1,3 +1,5 @@
+const CURRENT_YEAR = new Date().getFullYear();
+
 export default function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -16,7 +18,7 @@ export default function Footer() {
 
         {/* Center: Copyright */}
         <div className="text-white/40 text-xs sm:text-sm tracking-wide">
-          &copy; {new Date().getFullYear()} RAYAN TALEB
+          &copy; {CURRENT_YEAR} RAYAN TALEB
         </div>
 
         {/* Right: Back to top button */}

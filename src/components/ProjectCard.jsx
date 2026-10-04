@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { handleSpotlightMouseMove } from '../utils/spotlight';
+import { sanitizeUrl } from '../utils/security';
 
 export default function ProjectCard({ project, index = 0 }) {
   const [activeThumbnail, setActiveThumbnail] = useState(1);
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef(null);
   const thumbnailScrollRef = useRef(null);
+
+  const { safeUrl, isExternal } = sanitizeUrl(project.projectUrl);
 
   useEffect(() => {
     if (!('IntersectionObserver' in window)) {
@@ -75,7 +78,9 @@ export default function ProjectCard({ project, index = 0 }) {
             <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
               <span className="text-sm text-white/50">{project.tech}</span>
               <a
-                href={project.projectUrl || '#'}
+                href={safeUrl}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
                 className="inline-flex items-center gap-2 text-sm font-medium text-white hover:text-violet-400 transition-colors duration-200 group"
               >
                 View project

@@ -12,13 +12,28 @@ dist
 dist-ssr
 *.local
 
+# Environment & Secret Files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.cert
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db

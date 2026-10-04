@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { handleSpotlightMouseMove } from '../utils/spotlight';
+import { sanitizeUrl } from '../utils/security';
 
 export default function Contact() {
   const sectionRef = useRef(null);
@@ -234,11 +235,11 @@ export default function Contact() {
           {/* Contact Links Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-white/10">
             {contactLinks.map((link, index) => {
-              const isExternal = link.href.startsWith('http');
+              const { safeUrl, isExternal } = sanitizeUrl(link.href);
               return (
                 <a
                   key={link.label}
-                  href={link.href}
+                  href={safeUrl}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
                   onMouseMove={handleSpotlightMouseMove}
