@@ -44,7 +44,7 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl w-full grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-center">
+      <div className="relative z-10 mx-auto max-w-7xl w-full grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-14 items-center">
         {/* LEFT: Text Content */}
         <div className="order-2 lg:order-1">
           {/* Status Indicator */}
@@ -121,7 +121,7 @@ export default function Hero() {
 
         {/* RIGHT: Portrait Card */}
         <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-          <div className="portrait-enter relative w-full max-w-[480px] lg:max-w-none">
+          <div className="portrait-enter relative w-full max-w-[320px] sm:max-w-[360px] lg:max-w-[380px] xl:max-w-[400px]">
             <div
               className="relative rounded-[28px] sm:rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent overflow-hidden shadow-2xl shadow-black/60"
               style={parallaxStyle}
