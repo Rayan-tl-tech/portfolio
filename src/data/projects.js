@@ -58,7 +58,7 @@ export const projects = [
     tech: 'React · Node.js · Express · MongoDB',
     bgColor: 'bg-[#18181b]',
     accentColor: '#18181b',
-    projectUrl: '#',
+    projectUrl: 'https://velore-5w3s.vercel.app/',
     totalThumbnails: 15,
     basePath: '/projects/velor/',
     thumbnails: [
