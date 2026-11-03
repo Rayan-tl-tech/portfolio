@@ -121,7 +121,7 @@ export default function ProjectCard({ project, index = 0 }) {
                   <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
                 </div>
                 <div className="text-[10px] sm:text-[11px] font-mono text-white/40 bg-white/5 px-3 py-0.5 rounded-md border border-white/5 truncate max-w-[200px] sm:max-w-xs">
-                  {project.name.toLowerCase().replace(/\s+/g, '-')}.concept
+                  {project.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}.concept
                 </div>
                 <div className="text-[10px] sm:text-xs font-mono text-violet-400">
                   {activeThumb.label}
