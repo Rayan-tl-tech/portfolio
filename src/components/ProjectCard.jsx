@@ -135,7 +135,8 @@ export default function ProjectCard({ project, index = 0 }) {
                   src={`${project.basePath}${activeThumb.file}`}
                   alt={`${project.name} — ${activeThumb.label} view`}
                   className="w-full h-full object-cover object-top animate-in fade-in duration-300 transition-transform duration-[400ms] ease-out group-hover:scale-[1.02]"
-                  loading="eager"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>

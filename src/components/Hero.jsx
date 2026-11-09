@@ -127,12 +127,20 @@ export default function Hero() {
               style={parallaxStyle}
             >
               <div className="relative aspect-[4/5] sm:aspect-[3/4]">
-                <img
-                  src="/portrait.jpg"
-                  alt="Rayan Taleb — Web Developer and Software Engineer"
-                  className="absolute inset-0 w-full h-full object-cover object-center"
-                  loading="eager"
-                />
+                <picture className="absolute inset-0 w-full h-full">
+                  <source srcSet="/portrait.avif" type="image/avif" />
+                  <source srcSet="/portrait.webp" type="image/webp" />
+                  <img
+                    src="/portrait.webp"
+                    alt="Rayan Taleb — Web Developer and Software Engineer"
+                    width="645"
+                    height="646"
+                    fetchPriority="high"
+                    loading="eager"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
+                </picture>
 
                 {/* Gradient overlay for text readability */}
                 <div
