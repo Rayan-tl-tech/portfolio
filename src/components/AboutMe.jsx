@@ -2,13 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function AboutMe() {
   const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(
+    () => typeof window !== 'undefined' && !('IntersectionObserver' in window)
+  );
 
   useEffect(() => {
-    if (!('IntersectionObserver' in window)) {
-      setIsVisible(true);
-      return;
-    }
+    if (!('IntersectionObserver' in window)) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {

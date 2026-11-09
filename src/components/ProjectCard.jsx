@@ -4,17 +4,16 @@ import { sanitizeUrl } from '../utils/security';
 
 export default function ProjectCard({ project, index = 0 }) {
   const [activeThumbnail, setActiveThumbnail] = useState(1);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(
+    () => typeof window !== 'undefined' && !('IntersectionObserver' in window)
+  );
   const cardRef = useRef(null);
   const thumbnailScrollRef = useRef(null);
 
   const { safeUrl, isExternal } = sanitizeUrl(project.projectUrl);
 
   useEffect(() => {
-    if (!('IntersectionObserver' in window)) {
-      setIsVisible(true);
-      return;
-    }
+    if (!('IntersectionObserver' in window)) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
