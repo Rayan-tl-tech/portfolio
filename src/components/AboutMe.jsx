@@ -1,30 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
 export default function AboutMe() {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(
-    () => typeof window !== 'undefined' && !('IntersectionObserver' in window)
-  );
-
-  useEffect(() => {
-    if (!('IntersectionObserver' in window)) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const { ref: sectionRef, isVisible } = useRevealOnScroll({ threshold: 0.2 });
 
   const infoItems = [
     { number: '01', label: 'Web Developer' },

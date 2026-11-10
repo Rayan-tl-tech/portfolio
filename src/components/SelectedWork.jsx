@@ -1,32 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { projects } from '../data/projects';
 import ProjectCard from './ProjectCard';
 
 export default function SelectedWork() {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(
-    () => typeof window !== 'undefined' && !('IntersectionObserver' in window)
-  );
-
-  useEffect(() => {
-    if (!('IntersectionObserver' in window)) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.05, rootMargin: '120px' }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const { ref: sectionRef, isVisible } = useRevealOnScroll({
+    threshold: 0.05,
+    rootMargin: '120px',
+  });
 
   return (
     <section id="work" className="relative py-20 sm:py-32 px-4 sm:px-6 lg:px-8 scroll-mt-24 sm:scroll-mt-32">

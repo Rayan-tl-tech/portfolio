@@ -1,35 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { handleSpotlightMouseMove } from '../utils/spotlight';
 import { sanitizeUrl } from '../utils/security';
 
 export default function Contact() {
-  const sectionRef = useRef(null);
+  const { ref: sectionRef, isVisible } = useRevealOnScroll({
+    threshold: 0.05,
+    rootMargin: '120px',
+  });
   const magneticWrapperRef = useRef(null);
   const magneticBtnRef = useRef(null);
   const magneticArrowRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(
-    () => typeof window !== 'undefined' && !('IntersectionObserver' in window)
-  );
-
-  useEffect(() => {
-    if (!('IntersectionObserver' in window)) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.05, rootMargin: '120px' }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const handleMagneticMove = (e) => {
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;

@@ -1,36 +1,17 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import { handleSpotlightMouseMove } from '../utils/spotlight';
 import { sanitizeUrl } from '../utils/security';
 
 export default function ProjectCard({ project, index = 0 }) {
   const [activeThumbnail, setActiveThumbnail] = useState(1);
-  const [isVisible, setIsVisible] = useState(
-    () => typeof window !== 'undefined' && !('IntersectionObserver' in window)
-  );
-  const cardRef = useRef(null);
+  const { ref: cardRef, isVisible } = useRevealOnScroll({
+    threshold: 0.05,
+    rootMargin: '120px',
+  });
   const thumbnailScrollRef = useRef(null);
 
   const { safeUrl, isExternal } = sanitizeUrl(project.projectUrl);
-
-  useEffect(() => {
-    if (!('IntersectionObserver' in window)) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.05, rootMargin: '120px' }
-    );
-
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const handleThumbnailClick = (id) => {
     setActiveThumbnail(id);
