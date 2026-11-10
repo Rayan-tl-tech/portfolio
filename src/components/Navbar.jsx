@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
 
+const SECTIONS = ['home', 'work', 'about', 'services', 'contact'];
+
+const NAV_LINKS = [
+  { label: 'Work', href: '#work', section: 'work' },
+  { label: 'About', href: '#about', section: 'about' },
+  { label: 'Services', href: '#services', section: 'services' },
+  { label: 'Contact', href: '#contact', section: 'contact' },
+];
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
@@ -13,8 +22,7 @@ export default function Navbar() {
       const isScrolled = window.scrollY > 20;
       setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
 
-      const sections = ['home', 'work', 'about', 'services', 'contact'];
-      for (const section of sections) {
+      for (const section of SECTIONS) {
         const el = document.getElementById(section);
         if (el) {
           const rect = el.getBoundingClientRect();
@@ -45,13 +53,6 @@ export default function Navbar() {
     };
   }, []);
 
-  const navLinks = [
-    { label: 'Work', href: '#work', section: 'work' },
-    { label: 'About', href: '#about', section: 'about' },
-    { label: 'Services', href: '#services', section: 'services' },
-    { label: 'Contact', href: '#contact', section: 'contact' },
-  ];
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
       <div
@@ -78,7 +79,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation Links with Active Scroll Indicator */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => {
+            {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.section;
               return (
                 <a
@@ -145,7 +146,7 @@ export default function Navbar() {
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-white/10 px-5 py-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
-            {navLinks.map((link) => {
+            {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.section;
               return (
                 <a

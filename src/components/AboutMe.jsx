@@ -1,14 +1,14 @@
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 
+const INFO_ITEMS = [
+  { number: '01', label: 'Web Developer' },
+  { number: '02', label: 'Software Engineer' },
+  { number: '03', label: '2nd Year Computer Science Student' },
+  { number: '04', label: 'Based in Algeria' },
+];
+
 export default function AboutMe() {
   const { ref: sectionRef, isVisible } = useRevealOnScroll({ threshold: 0.2 });
-
-  const infoItems = [
-    { number: '01', label: 'Web Developer' },
-    { number: '02', label: 'Software Engineer' },
-    { number: '03', label: '2nd Year Computer Science Student' },
-    { number: '04', label: 'Based in Algeria' },
-  ];
 
   return (
     <section
@@ -56,7 +56,7 @@ export default function AboutMe() {
 
               {/* Info Highlights Grid */}
               <div className="grid sm:grid-cols-2 gap-0 border-t border-white/10">
-                {infoItems.map((item, idx) => (
+                {INFO_ITEMS.map((item, idx) => (
                   <div
                     key={item.number}
                     className={`flex items-center gap-4 py-6 border-b border-white/10 ${

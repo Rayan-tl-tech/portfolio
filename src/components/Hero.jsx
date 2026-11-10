@@ -1,33 +1,53 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function Hero() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isDesktop, setIsDesktop] = useState(false);
+  const portraitCardRef = useRef(null);
 
   useEffect(() => {
-    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
-    checkDesktop();
-    window.addEventListener('resize', checkDesktop);
-    return () => window.removeEventListener('resize', checkDesktop);
-  }, []);
+    const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!isFinePointer || isReducedMotion) return;
 
-  useEffect(() => {
-    if (!isDesktop) return;
-    const handleMouseMove = (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      setMousePos({ x, y });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isDesktop]);
+    let isDesktop = window.innerWidth >= 1024;
+    let targetX = 0;
+    let targetY = 0;
+    let animationFrameId = null;
 
-  const parallaxStyle = isDesktop
-    ? {
-        transform: `translate(${mousePos.x * 6}px, ${mousePos.y * 6}px)`,
-        transition: 'transform 0.3s ease-out',
+    const handleResize = () => {
+      isDesktop = window.innerWidth >= 1024;
+      if (!isDesktop && portraitCardRef.current) {
+        portraitCardRef.current.style.transform = '';
       }
-    : {};
+    };
+
+    const updateParallax = () => {
+      if (portraitCardRef.current && isDesktop) {
+        portraitCardRef.current.style.transform = `translate(${targetX * 6}px, ${targetY * 6}px)`;
+      }
+      animationFrameId = null;
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDesktop) return;
+      targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+      targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      if (animationFrameId === null) {
+        animationFrameId = window.requestAnimationFrame(updateParallax);
+      }
+    };
+
+    window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (animationFrameId !== null) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, []);
 
   return (
     <section
@@ -123,8 +143,9 @@ export default function Hero() {
         <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
           <div className="portrait-enter relative w-full max-w-[320px] sm:max-w-[360px] lg:max-w-[380px] xl:max-w-[400px]">
             <div
+              ref={portraitCardRef}
               className="relative rounded-[28px] sm:rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent overflow-hidden shadow-2xl shadow-black/60"
-              style={parallaxStyle}
+              style={{ transition: 'transform 0.3s ease-out' }}
             >
               <div className="relative aspect-[4/5] sm:aspect-[3/4]">
                 <picture className="absolute inset-0 w-full h-full">
