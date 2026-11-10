@@ -61,9 +61,9 @@ export default function ProjectCard({ project, index = 0 }) {
           {/* Left: Number, Category, Name */}
           <div>
             <span className="text-sm text-white/40 font-mono">{project.number}</span>
-            <h3 className="text-[11px] sm:text-xs font-medium tracking-[0.2em] text-white/60 uppercase mt-4 sm:mt-6 mb-3 sm:mb-4">
+            <p className="text-[11px] sm:text-xs font-medium tracking-[0.2em] text-white/60 uppercase mt-4 sm:mt-6 mb-3 sm:mb-4">
               {project.category}
-            </h3>
+            </p>
             <h2 className="text-[clamp(2.25rem,5.5vw,4.5rem)] font-light text-white leading-[1.05] tracking-tight">
               {project.name}
             </h2>
