@@ -6,9 +6,10 @@ export const projects = [
     description:
       'A premium restaurant website concept focused on cinematic visual presentation, an expressive menu, and a refined reservation experience.',
     tech: 'React · Tailwind CSS',
-    bgColor: 'bg-[#b8623f]',
+    bgColor: 'bg-[#493025]',
     accentColor: '#b8623f',
     projectUrl: 'https://restorant-showcase.vercel.app/',
+    githubUrl: null,
     totalThumbnails: 9,
     basePath: '/projects/maison-ember/',
     thumbnails: [
@@ -30,9 +31,10 @@ export const projects = [
     description:
       'A complete online store experience with product discovery, cart and ordering flows, authentication, and a comprehensive administration dashboard.',
     tech: 'React · Tailwind CSS',
-    bgColor: 'bg-[#4f46e5]',
+    bgColor: 'bg-[#292653]',
     accentColor: '#4f46e5',
     projectUrl: 'https://final-project-delta-gules-45.vercel.app/',
+    githubUrl: null,
     totalThumbnails: 11,
     basePath: '/projects/shoplify/',
     thumbnails: [
@@ -59,6 +61,7 @@ export const projects = [
     bgColor: 'bg-[#18181b]',
     accentColor: '#18181b',
     projectUrl: 'https://velore-5w3s.vercel.app/',
+    githubUrl: 'https://github.com/Rayan-tl-tech/velore',
     totalThumbnails: 15,
     basePath: '/projects/velor/',
     thumbnails: [

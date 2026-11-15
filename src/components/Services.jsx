@@ -1,12 +1,12 @@
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
-import { handleSpotlightMouseMove } from '../utils/spotlight';
 
 const SERVICES = [
   {
     number: '01',
     title: 'Business Websites',
     description:
-      'Modern and professional websites designed for businesses and brands.',
+      'Give your business a professional online presence. Present your services clearly, build trust, and make it easy for potential customers to contact you.',
+    features: ['Custom Design', 'Mobile-Friendly', 'Contact Integration'],
     icon: (
       <svg
         width="24"
@@ -29,7 +29,8 @@ const SERVICES = [
     number: '02',
     title: 'Landing Pages',
     description:
-      'Focused landing pages designed around a specific product, service or objective.',
+      'Promote a specific product, service, or offer with a focused page that explains its value and guides visitors toward a clear next step.',
+    features: ['Focused Message', 'Clear CTA', 'Mobile-First'],
     icon: (
       <svg
         width="24"
@@ -54,7 +55,8 @@ const SERVICES = [
     number: '03',
     title: 'E-commerce Websites',
     description:
-      'Modern online stores with product catalogs, shopping carts and ordering functionality.',
+      'Let customers browse your products and place orders online, while you manage your catalog and handle incoming orders from one place.',
+    features: ['Product Catalog', 'Online Ordering', 'Order Management'],
     icon: (
       <svg
         width="24"
@@ -76,7 +78,10 @@ const SERVICES = [
 ];
 
 export default function Services() {
-  const { ref: sectionRef, isVisible } = useRevealOnScroll({ threshold: 0.2 });
+  const { ref: sectionRef, isVisible } = useRevealOnScroll({
+    threshold: 0.08,
+    rootMargin: '60px',
+  });
 
   return (
     <section
@@ -102,7 +107,7 @@ export default function Services() {
               </div>
               <div>
                 <p className="text-base sm:text-lg text-white/60 leading-relaxed max-w-lg">
-                  Thoughtful digital solutions built to present your business at its best.
+                  I build clear, responsive digital experiences that help businesses present their value, reach customers, and grow online.
                 </p>
               </div>
             </div>
@@ -111,10 +116,11 @@ export default function Services() {
           {/* Service Cards Grid */}
           <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
             {SERVICES.map((service, idx) => (
-              <div
+              <a
                 key={service.number}
-                onMouseMove={handleSpotlightMouseMove}
-                className={`service-card spotlight-card relative rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 sm:p-10 overflow-hidden group cursor-default transition-all duration-[600ms] ease-out hover:border-violet-500/30 shadow-lg ${
+                href="#contact"
+                aria-label={`Discuss ${service.title} — Contact Rayan Taleb`}
+                className={`service-card relative block rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 sm:p-8 md:p-6 lg:p-8 xl:p-10 overflow-hidden group cursor-pointer hover:border-violet-500/25 hover:-translate-y-[2px] focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0f] shadow-lg ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'
                 }`}
                 style={{
@@ -132,11 +138,11 @@ export default function Services() {
                   <div>
                     {/* Top Row: Number & Icon */}
                     <div className="flex items-start justify-between mb-12 sm:mb-16">
-                      <span className="text-sm text-white/30 font-mono">
+                      <span className="text-sm text-white/50 font-mono">
                         {service.number}
                       </span>
-                      <div className="service-icon flex items-center justify-center w-12 h-12 rounded-full border border-white/20 bg-transparent">
-                        <div className="text-white/70">{service.icon}</div>
+                      <div className="service-icon flex items-center justify-center w-12 h-12 rounded-full border border-white/20 bg-transparent text-white/70 group-hover:text-white group-focus-visible:text-white transition-all duration-300">
+                        {service.icon}
                       </div>
                     </div>
 
@@ -146,17 +152,51 @@ export default function Services() {
                     </h3>
 
                     {/* Description */}
-                    <p className="text-sm sm:text-base text-white/60 leading-relaxed">
+                    <p className="text-sm sm:text-base text-white/60 leading-relaxed mb-6">
                       {service.description}
                     </p>
+
+                    {/* Key Features Badges */}
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      {service.features.map((feature) => (
+                        <span
+                          key={feature}
+                          className="text-[11px] sm:text-xs font-medium text-white/70 bg-white/[0.04] border border-white/[0.08] px-2.5 py-1 rounded-md"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Bottom Hover Accent Bar */}
-                  <div className="mt-12 sm:mt-16 h-[2px] bg-white/10 rounded-full overflow-hidden">
-                    <div className="service-accent h-full w-0 bg-violet-500 rounded-full" />
+                  {/* Bottom Action Area: Indicator & Accent Bar */}
+                  <div className="mt-8 sm:mt-12">
+                    <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-white/50 group-hover:text-white group-focus-visible:text-white transition-colors duration-300 mb-3">
+                      <span className="whitespace-nowrap">Discuss this service</span>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                        className="flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1 text-violet-400"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                      </svg>
+                    </div>
+
+                    {/* Bottom Hover Accent Bar */}
+                    <div className="h-[2px] bg-white/10 rounded-full overflow-hidden">
+                      <div className="service-accent h-full w-0 bg-violet-500/70 rounded-full" />
+                    </div>
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>

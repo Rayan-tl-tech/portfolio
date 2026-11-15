@@ -101,7 +101,7 @@ export default function Navbar() {
           {/* CTA Button */}
           <a
             href="#contact"
-            className="hidden sm:inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-violet-600/20"
+            className="hidden sm:inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-md shadow-black/20"
           >
             Let's Work Together
             <svg
@@ -164,7 +164,7 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="mt-2 inline-flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-5 py-3 rounded-xl transition-all"
+              className="mt-2 inline-flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-5 py-3 rounded-full shadow-md shadow-black/20 transition-all"
             >
               Let's Work Together
               <svg

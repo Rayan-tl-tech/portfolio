@@ -7,8 +7,15 @@ const INFO_ITEMS = [
   { number: '04', label: 'Based in Algeria' },
 ];
 
+const ITEM_DELAYS = [
+  'stagger-delay-450',
+  'stagger-delay-550',
+  'stagger-delay-650',
+  'stagger-delay-750',
+];
+
 export default function AboutMe() {
-  const { ref: sectionRef, isVisible } = useRevealOnScroll({ threshold: 0.2 });
+  const { ref: sectionRef, isVisible } = useRevealOnScroll({ threshold: 0.15 });
 
   return (
     <section
@@ -16,12 +23,11 @@ export default function AboutMe() {
       className="relative py-20 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden scroll-mt-24 sm:scroll-mt-32"
     >
       <div className="mx-auto max-w-7xl">
-        <div
-          ref={sectionRef}
-          className={`section-reveal ${isVisible ? 'visible' : ''}`}
-        >
+        <div>
           {/* Section Header Tag */}
-          <div className="mb-10 sm:mb-14">
+          <div
+            className={`stagger-reveal stagger-delay-0 ${isVisible ? 'visible' : ''} mb-10 sm:mb-14`}
+          >
             <span className="text-[11px] sm:text-xs font-medium tracking-[0.2em] text-violet-500 uppercase mb-4 block">
               About Me
             </span>
@@ -42,16 +48,27 @@ export default function AboutMe() {
             {/* Right: Content & Highlights */}
             <div>
               {/* Heading */}
-              <h2 className="text-[clamp(2.25rem,5.5vw,4.5rem)] font-extrabold leading-[1.1] tracking-tight mb-8 sm:mb-10">
+              <h2
+                ref={sectionRef}
+                className={`stagger-reveal stagger-delay-150 ${isVisible ? 'visible' : ''} text-[clamp(2.25rem,5.5vw,4.5rem)] font-extrabold leading-[1.1] tracking-tight mb-8 sm:mb-10`}
+              >
                 I turn ideas into{' '}
                 <span className="text-violet-500">clear, polished</span>{' '}
                 digital experiences.
               </h2>
 
               {/* Description */}
-              <p className="text-base sm:text-lg text-white/60 leading-relaxed max-w-2xl mb-12 sm:mb-16">
-                I'm Rayan, a Computer Science student and Web Developer focused on
-                creating modern, responsive and professional websites.
+              <p
+                className={`stagger-reveal stagger-delay-300 ${isVisible ? 'visible' : ''} text-base sm:text-lg text-white/60 leading-relaxed max-w-2xl mb-12 sm:mb-16`}
+              >
+                I'm <span className="text-white font-medium">Rayan</span>, a{' '}
+                <span className="text-white font-medium">Computer Science student</span>{' '}
+                and <span className="text-violet-400 font-medium">Web Developer</span>{' '}
+                focused on creating{' '}
+                <span className="text-white font-medium">
+                  modern, responsive and professional websites
+                </span>
+                .
               </p>
 
               {/* Info Highlights Grid */}
@@ -59,21 +76,22 @@ export default function AboutMe() {
                 {INFO_ITEMS.map((item, idx) => (
                   <div
                     key={item.number}
-                    className={`flex items-center gap-4 py-6 border-b border-white/10 ${
-                      idx % 2 === 0 ? 'sm:border-r sm:border-white/10 sm:pr-8' : 'sm:pl-8'
-                    } transition-all duration-[600ms] ease-out ${
-                      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'
-                    }`}
-                    style={{
-                      transitionDelay: isVisible ? `${idx * 80}ms` : '0ms',
-                    }}
+                    className={`stagger-reveal ${ITEM_DELAYS[idx]} ${isVisible ? 'visible' : ''}`}
                   >
-                    <span className="text-sm text-violet-500 font-mono font-medium">
-                      {item.number}
-                    </span>
-                    <span className="text-base sm:text-lg font-medium text-white">
-                      {item.label}
-                    </span>
+                    <div
+                      className={`about-info-card group h-full flex items-center py-6 border-b border-white/10 cursor-default ${
+                        idx % 2 === 0 ? 'sm:border-r sm:border-white/10 sm:pr-8' : 'sm:pl-8'
+                      }`}
+                    >
+                      <div className="about-info-inner flex items-center gap-4">
+                        <span className="about-info-number text-sm text-violet-500 group-hover:text-violet-400 font-mono font-medium">
+                          {item.number}
+                        </span>
+                        <span className="text-base sm:text-lg font-medium text-white">
+                          {item.label}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

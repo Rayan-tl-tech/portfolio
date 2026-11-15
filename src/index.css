@@ -85,56 +85,26 @@ body {
   transform: translateY(0);
 }
 
-/* Interactive Card Spotlight Glow (Animation 1) */
-.spotlight-card {
-  position: relative;
-  --mouse-x: -500px;
-  --mouse-y: -500px;
+/* Scroll-triggered staggered element reveals */
+.stagger-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .spotlight-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(
-      220px circle at var(--mouse-x) var(--mouse-y),
-      rgba(139, 92, 246, 0.11),
-      transparent 80%
-    );
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .spotlight-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: radial-gradient(
-      240px circle at var(--mouse-x) var(--mouse-y),
-      rgba(139, 92, 246, 0.22),
-      transparent 70%
-    );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .spotlight-card:hover::before,
-  .spotlight-card:hover::after {
-    opacity: 1;
-  }
+.stagger-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
+
+.stagger-delay-0 { transition-delay: 0ms; }
+.stagger-delay-150 { transition-delay: 150ms; }
+.stagger-delay-300 { transition-delay: 300ms; }
+.stagger-delay-450 { transition-delay: 450ms; }
+.stagger-delay-550 { transition-delay: 550ms; }
+.stagger-delay-650 { transition-delay: 650ms; }
+.stagger-delay-750 { transition-delay: 750ms; }
 
 /* Ambient Header Light Sweep (Animation 4) */
 @keyframes badgeShimmer {
@@ -186,29 +156,33 @@ body {
 
 /* Service Card Transitions */
 .service-card {
-  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.service-card:hover {
-  background-color: rgba(139, 92, 246, 0.03);
+.service-card:hover,
+.service-card:focus-visible {
+  background-color: rgba(139, 92, 246, 0.06);
+  border-color: rgba(139, 92, 246, 0.25);
 }
-.service-card:hover .service-icon {
-  background-color: rgba(139, 92, 246, 1);
-  border-color: rgba(139, 92, 246, 1);
-  box-shadow: 0 0 16px rgba(139, 92, 246, 0.35);
+.service-card:hover .service-icon,
+.service-card:focus-visible .service-icon {
+  background-color: rgba(139, 92, 246, 0.10);
+  border-color: rgba(139, 92, 246, 0.30);
 }
-.service-card:hover .service-icon svg {
+.service-card:hover .service-icon svg,
+.service-card:focus-visible .service-icon svg {
   color: #ffffff;
 }
-.service-card:hover .service-accent {
+.service-card:hover .service-accent,
+.service-card:focus-visible .service-accent {
   width: 100%;
-  background-color: rgba(139, 92, 246, 1);
+  background-color: rgba(139, 92, 246, 0.7);
 }
 
 .service-icon {
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .service-accent {
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Contact micro-interactions */
@@ -217,23 +191,43 @@ body {
 }
 .cta-circle:hover {
   background-color: #7c3aed;
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
 }
 
-.contact-link {
-  transition: background-color 0.25s ease, border-color 0.25s ease;
-}
-.contact-link:hover {
-  background-color: rgba(255, 255, 255, 0.03);
-}
-.contact-link:hover .contact-icon-box {
-  border-color: rgba(139, 92, 246, 0.5);
-  background-color: rgba(139, 92, 246, 0.1);
-  box-shadow: 0 0 12px rgba(139, 92, 246, 0.2);
+.contact-card {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 0.3s ease,
+              border-color 0.3s ease;
 }
 
-.contact-icon-box {
-  transition: all 0.25s ease;
+/* About Me Info Cards Micro-Interactions */
+.about-info-card {
+  transition: background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-info-inner {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.about-info-number {
+  transition: color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .about-info-card:hover {
+    background-color: rgba(139, 92, 246, 0.06);
+    border-color: rgba(139, 92, 246, 0.25);
+  }
+
+  .about-info-card:hover .about-info-inner {
+    transform: translateY(-2px);
+  }
+
+  .about-info-card:hover .about-info-number {
+    color: #a78bfa;
+  }
 }
 
 /* Accessibility & Reduced Motion */
@@ -241,21 +235,24 @@ body {
   .reveal-line,
   .portrait-enter,
   .section-reveal,
+  .stagger-reveal,
   .badge-shimmer::after {
     animation: none !important;
+    transition: none !important;
     opacity: 1 !important;
     transform: none !important;
-  }
-  .spotlight-card::before,
-  .spotlight-card::after {
-    display: none !important;
   }
   .service-card,
   .service-icon,
   .service-accent,
   .cta-circle,
   .contact-link,
-  .contact-icon-box {
+  .contact-icon-box,
+  .contact-card,
+  .about-info-card,
+  .about-info-inner,
+  .about-info-number {
     transition: none !important;
+    transform: none !important;
   }
 }

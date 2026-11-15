@@ -1,9 +1,8 @@
 import { useRef } from 'react';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
-import { handleSpotlightMouseMove } from '../utils/spotlight';
 import { sanitizeUrl } from '../utils/security';
 
-const CONTACT_LINKS = [
+const CONTACT_METHODS = [
   {
     label: 'Email',
     value: 'rayan.taleb.dev@gmail.com',
@@ -22,6 +21,16 @@ const CONTACT_LINKS = [
       >
         <rect x="2" y="4" width="20" height="16" rx="2" />
         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </svg>
+    ),
+  },
+  {
+    label: 'WhatsApp',
+    value: '+213 551 95 58 89',
+    href: 'https://wa.me/213551955889',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
       </svg>
     ),
   },
@@ -90,7 +99,7 @@ export default function Contact() {
     const deltaX = e.clientX - centerX;
     const deltaY = e.clientY - centerY;
 
-    // Subtle magnetic attraction: max 8px for circular button, max 12px for arrow icon
+    // Subtle magnetic attraction: max 8px for button, max 12px for arrow icon
     const pullX = Math.max(-8, Math.min(8, deltaX * 0.18));
     const pullY = Math.max(-8, Math.min(8, deltaY * 0.18));
 
@@ -122,12 +131,12 @@ export default function Contact() {
       id="contact"
       className="relative py-20 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden scroll-mt-24 sm:scroll-mt-32"
     >
-      {/* Subtle purple glow at bottom */}
+      {/* Subtle purple ambient glow */}
       <div
         className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full opacity-15 blur-[150px] pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, transparent 70%)',
+            'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
         }}
         aria-hidden="true"
       />
@@ -137,110 +146,116 @@ export default function Contact() {
           ref={sectionRef}
           className={`section-reveal ${isVisible ? 'visible' : ''}`}
         >
-          {/* Top: Section Label */}
-          <div className="mb-8 sm:mb-12">
-            <span className="text-[11px] sm:text-xs font-medium tracking-[0.2em] text-violet-500 uppercase">
-              Start a Conversation
-            </span>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 items-center">
+            {/* Left Column: Heading, Context & Primary Action */}
+            <div className="md:col-span-5 flex flex-col justify-between">
+              <div>
+                {/* Status Badge */}
+                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] mb-6 sm:mb-8">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                  <span className="text-[11px] sm:text-xs font-medium tracking-[0.18em] text-white/70 uppercase">
+                    Start a Conversation
+                  </span>
+                </div>
 
-          {/* Main CTA Row */}
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 lg:gap-12 mb-16 sm:mb-20">
-            {/* Heading */}
-            <h2 className="text-[clamp(3rem,8vw,8rem)] font-extrabold leading-[0.95] tracking-tight">
-              <span className="block text-white">Have a project</span>
-              <span className="block text-violet-500">in mind?</span>
-            </h2>
+                {/* Main Heading */}
+                <h2 className="text-[clamp(2.75rem,5.5vw,5.5rem)] font-extrabold leading-[0.98] tracking-tight">
+                  <span className="block text-white">Have a project</span>
+                  <span className="block text-violet-500">in mind?</span>
+                </h2>
 
-            {/* Large circular CTA button with subtle magnetic tracking */}
-            <div
-              ref={magneticWrapperRef}
-              onMouseMove={handleMagneticMove}
-              onMouseLeave={handleMagneticLeave}
-              className="relative p-2 -m-2 flex items-center justify-center"
-            >
-              <a
-                ref={magneticBtnRef}
-                href="mailto:rayan.taleb.dev@gmail.com"
-                className="cta-circle flex-shrink-0 flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-violet-600 hover:bg-violet-500 text-white shadow-xl shadow-violet-600/30 will-change-transform"
-                aria-label="Send email to Rayan Taleb"
+                {/* Engaging Description */}
+                <p className="mt-6 text-base sm:text-lg text-white/60 max-w-md leading-relaxed">
+                  Let's build something great together. Whether you need a full website, a focused landing page, or want to discuss a new concept, feel free to reach out.
+                </p>
+              </div>
+
+              {/* Primary Email CTA (Single action, with magnetic tracking) */}
+              <div
+                ref={magneticWrapperRef}
+                onMouseMove={handleMagneticMove}
+                onMouseLeave={handleMagneticLeave}
+                className="mt-8 sm:mt-10 inline-block self-start"
               >
-                <svg
-                  ref={magneticArrowRef}
-                  width="32"
-                  height="32"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                  className="will-change-transform"
-                >
-                  <path d="M7 17L17 7" />
-                  <path d="M7 7h10v10" />
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          {/* Subtitle + Secondary CTA Button */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-12 sm:pb-16 border-b border-white/10">
-            <p className="text-lg sm:text-xl text-white/60">
-              Let's build something great together.
-            </p>
-            <a
-              href="mailto:rayan.taleb.dev@gmail.com"
-              className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-6 py-3.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-violet-600/25 flex-shrink-0"
-            >
-              Let's Work Together
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </a>
-          </div>
-
-          {/* Contact Links Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-white/10">
-            {CONTACT_LINKS.map((link, index) => {
-              const { safeUrl, isExternal } = sanitizeUrl(link.href);
-              return (
                 <a
-                  key={link.label}
-                  href={safeUrl}
-                  target={isExternal ? '_blank' : undefined}
-                  rel={isExternal ? 'noopener noreferrer' : undefined}
-                  onMouseMove={handleSpotlightMouseMove}
-                  className={`spotlight-card contact-link flex items-center gap-4 px-6 py-8 ${
-                    index < CONTACT_LINKS.length - 1 ? 'lg:border-r' : ''
-                  } ${index < 2 ? 'sm:border-b lg:border-b-0' : ''} border-white/10`}
+                  ref={magneticBtnRef}
+                  href="mailto:rayan.taleb.dev@gmail.com"
+                  className="inline-flex items-center gap-3.5 bg-violet-600 hover:bg-violet-500 text-white font-medium text-sm sm:text-base px-7 py-4 rounded-full transition-all duration-200 shadow-lg shadow-black/30 hover:shadow-black/50 will-change-transform group"
+                  aria-label="Send email to Rayan Taleb"
                 >
-                  <div className="contact-icon-box relative z-10 flex items-center justify-center w-12 h-12 rounded-xl border border-white/10 bg-white/[0.03] text-white/80 flex-shrink-0">
-                    {link.icon}
-                  </div>
-                  <div className="relative z-10 min-w-0">
-                    <div className="text-white font-medium text-sm sm:text-base">
-                      {link.label}
-                    </div>
-                    <div className="text-white/50 text-xs sm:text-sm mt-0.5 truncate">
-                      {link.value}
-                    </div>
+                  <span>Send an Email</span>
+                  <div
+                    ref={magneticArrowRef}
+                    className="flex items-center justify-center w-7 h-7 rounded-full bg-white/15 group-hover:bg-white/25 transition-colors will-change-transform"
+                  >
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M7 17L17 7" />
+                      <path d="M7 7h10v10" />
+                    </svg>
                   </div>
                 </a>
-              );
-            })}
+              </div>
+            </div>
+
+            {/* Right Column: 5 Contact Cards (Uniform Dimensions & Monochrome Hierarchy) */}
+            <div className="md:col-span-7 flex flex-col space-y-3 sm:space-y-3.5">
+              {CONTACT_METHODS.map((link) => {
+                const { safeUrl, isExternal } = sanitizeUrl(link.href);
+                return (
+                  <a
+                    key={link.label}
+                    href={safeUrl}
+                    target={isExternal ? '_blank' : undefined}
+                    rel={isExternal ? 'noopener noreferrer' : undefined}
+                    className="contact-card group relative flex items-center justify-between p-4 sm:p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-violet-500/30 transition-all duration-300 hover:-translate-y-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+                    aria-label={`${link.label}: ${link.value}`}
+                  >
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-xl border border-white/10 bg-white/[0.03] text-white/70 group-hover:text-white group-hover:border-violet-500/40 group-hover:bg-violet-500/10 transition-all duration-300 flex-shrink-0">
+                        {link.icon}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider">
+                          {link.label}
+                        </div>
+                        <div className="text-sm sm:text-base font-medium text-white group-hover:text-violet-300 transition-colors duration-200 truncate mt-0.5">
+                          {link.value}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-center w-9 h-9 rounded-full border border-white/10 text-white/40 group-hover:text-white group-hover:border-violet-500/40 group-hover:bg-violet-500/10 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 flex-shrink-0 ml-4">
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M7 17L17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

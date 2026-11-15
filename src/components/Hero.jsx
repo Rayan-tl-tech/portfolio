@@ -8,41 +8,103 @@ export default function Hero() {
     const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!isFinePointer || isReducedMotion) return;
 
+    const card = portraitCardRef.current;
+    if (!card) return;
+
     let isDesktop = window.innerWidth >= 1024;
     let targetX = 0;
     let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
     let animationFrameId = null;
 
     const handleResize = () => {
-      isDesktop = window.innerWidth >= 1024;
-      if (!isDesktop && portraitCardRef.current) {
-        portraitCardRef.current.style.transform = '';
+      const desktop = window.innerWidth >= 1024;
+      if (desktop !== isDesktop) {
+        isDesktop = desktop;
+        if (!isDesktop) {
+          if (animationFrameId !== null) {
+            window.cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+          }
+          card.style.transform = '';
+          currentX = 0;
+          currentY = 0;
+          targetX = 0;
+          targetY = 0;
+        }
       }
     };
 
-    const updateParallax = () => {
-      if (portraitCardRef.current && isDesktop) {
-        portraitCardRef.current.style.transform = `translate(${targetX * 6}px, ${targetY * 6}px)`;
+    const animate = () => {
+      if (!isDesktop) {
+        animationFrameId = null;
+        return;
       }
-      animationFrameId = null;
+
+      // Smooth damping interpolation (max 6px displacement)
+      const ease = 0.08;
+      currentX += (targetX * 6 - currentX) * ease;
+      currentY += (targetY * 6 - currentY) * ease;
+
+      const diffX = Math.abs(targetX * 6 - currentX);
+      const diffY = Math.abs(targetY * 6 - currentY);
+
+      if (diffX < 0.02 && diffY < 0.02) {
+        currentX = targetX * 6;
+        currentY = targetY * 6;
+        card.style.transform =
+          currentX === 0 && currentY === 0
+            ? ''
+            : `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+        animationFrameId = null;
+        return;
+      }
+
+      card.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+      animationFrameId = window.requestAnimationFrame(animate);
     };
 
     const handleMouseMove = (e) => {
       if (!isDesktop) return;
-      targetX = (e.clientX / window.innerWidth - 0.5) * 2;
-      targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+      const rect = card.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const rawX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      const rawY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+      targetX = Math.max(-1, Math.min(1, rawX));
+      targetY = Math.max(-1, Math.min(1, rawY));
 
       if (animationFrameId === null) {
-        animationFrameId = window.requestAnimationFrame(updateParallax);
+        animationFrameId = window.requestAnimationFrame(animate);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      if (!isDesktop) return;
+      targetX = 0;
+      targetY = 0;
+
+      if (animationFrameId === null) {
+        animationFrameId = window.requestAnimationFrame(animate);
       }
     };
 
     window.addEventListener('resize', handleResize, { passive: true });
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    card.addEventListener('mousemove', handleMouseMove, { passive: true });
+    card.addEventListener('mouseenter', handleMouseMove, { passive: true });
+    card.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+    card.addEventListener('pointerleave', handleMouseLeave, { passive: true });
+    document.addEventListener('mouseleave', handleMouseLeave, { passive: true });
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMove);
+      card.removeEventListener('mousemove', handleMouseMove);
+      card.removeEventListener('mouseenter', handleMouseMove);
+      card.removeEventListener('mouseleave', handleMouseLeave);
+      card.removeEventListener('pointerleave', handleMouseLeave);
+      document.removeEventListener('mouseleave', handleMouseLeave);
       if (animationFrameId !== null) {
         window.cancelAnimationFrame(animationFrameId);
       }
@@ -66,13 +128,13 @@ export default function Hero() {
 
       <div className="relative z-10 mx-auto max-w-7xl w-full grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-14 items-center">
         {/* LEFT: Text Content */}
-        <div className="order-2 lg:order-1">
+        <div className="order-1">
           {/* Status Indicator */}
           <div className="reveal-line flex items-center gap-2.5 mb-8 sm:mb-10">
             <div className="badge-shimmer inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03]">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
               </span>
               <span className="text-[11px] sm:text-xs font-medium tracking-[0.2em] text-white/80 uppercase">
                 Available for selected projects
@@ -82,17 +144,19 @@ export default function Hero() {
 
           {/* Main Headline */}
           <h1 className="font-extrabold leading-[0.95] tracking-tight">
-            <span className="reveal-line reveal-line-delay-1 block text-[clamp(2.75rem,7.5vw,7rem)] text-white">
+            <span className="reveal-line reveal-line-delay-1 block text-[clamp(2.5rem,5.5vw,4.5rem)] text-white">
               Web Developer
             </span>
-            <span className="reveal-line reveal-line-delay-2 block text-[clamp(1.75rem,4.5vw,4rem)] text-white/40 font-light my-1 sm:my-2">
+            <span className="reveal-line reveal-line-delay-2 block text-[clamp(1.5rem,3.5vw,2.75rem)] text-white/40 font-light my-1 sm:my-2">
               &amp;
             </span>
-            <span className="reveal-line reveal-line-delay-3 block text-[clamp(2.75rem,7.5vw,7rem)] text-white">
-              Software
-            </span>
-            <span className="reveal-line reveal-line-delay-4 block text-[clamp(2.75rem,7.5vw,7rem)] text-violet-500">
-              Engineer
+            <span className="block text-[clamp(2.5rem,5.5vw,4.5rem)]">
+              <span className="reveal-line reveal-line-delay-3 block sm:inline-block text-white">
+                Software
+              </span>{' '}
+              <span className="reveal-line reveal-line-delay-4 block sm:inline-block text-violet-500">
+                Engineer
+              </span>
             </span>
           </h1>
 
@@ -105,7 +169,7 @@ export default function Hero() {
           <div className="reveal-line reveal-line-delay-6 mt-10 sm:mt-12 flex flex-col sm:flex-row gap-4">
             <a
               href="#work"
-              className="inline-flex items-center justify-center gap-2.5 bg-violet-600 hover:bg-violet-500 text-white font-medium px-7 py-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-violet-600/25 text-sm sm:text-base"
+              className="inline-flex items-center justify-center gap-2.5 bg-violet-600 hover:bg-violet-500 text-white font-medium px-7 py-4 rounded-full transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-sm text-sm sm:text-base"
             >
               View My Work
               <svg
@@ -125,7 +189,7 @@ export default function Hero() {
             </a>
             <a
               href="#contact"
-              className="inline-flex items-center justify-center gap-2.5 border border-white/15 hover:border-white/30 bg-white/[0.03] hover:bg-white/[0.06] text-white font-medium px-7 py-4 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 text-sm sm:text-base"
+              className="inline-flex items-center justify-center gap-2.5 border border-white/15 hover:border-white/30 bg-white/[0.03] hover:bg-white/[0.06] text-white font-medium px-7 py-4 rounded-full transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 text-sm sm:text-base"
             >
               Let's Work Together
             </a>
@@ -140,12 +204,11 @@ export default function Hero() {
         </div>
 
         {/* RIGHT: Portrait Card */}
-        <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+        <div className="order-2 flex justify-center lg:justify-end">
           <div className="portrait-enter relative w-full max-w-[320px] sm:max-w-[360px] lg:max-w-[380px] xl:max-w-[400px]">
             <div
               ref={portraitCardRef}
-              className="relative rounded-[28px] sm:rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent overflow-hidden shadow-2xl shadow-black/60"
-              style={{ transition: 'transform 0.3s ease-out' }}
+              className="relative rounded-[28px] sm:rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent overflow-hidden shadow-2xl shadow-black/60 will-change-transform"
             >
               <div className="relative aspect-[4/5] sm:aspect-[3/4]">
                 <picture className="absolute inset-0 w-full h-full">
@@ -173,28 +236,19 @@ export default function Hero() {
                   aria-hidden="true"
                 />
 
-                {/* Available Badge */}
-                <div className="absolute top-4 right-4 sm:top-6 sm:right-6 flex items-center gap-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-full px-3.5 py-1.5 sm:px-4 sm:py-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-                  </span>
-                  <span className="text-xs font-medium text-white">Available</span>
-                </div>
-
                 {/* Name & Role */}
                 <div className="absolute bottom-5 left-5 sm:bottom-7 sm:left-7">
-                  <h2 className="text-white font-semibold text-lg sm:text-xl">
+                  <p className="text-white font-semibold text-lg sm:text-xl">
                     Rayan Taleb
-                  </h2>
+                  </p>
                   <p className="text-white/60 text-sm mt-0.5">Web Developer</p>
                 </div>
 
                 {/* Rotated Technical Identifier */}
                 <div
-                  className="absolute right-3 sm:right-5 top-1/2 text-[10px] sm:text-xs tracking-[0.2em] text-white/40 font-medium"
+                  className="absolute right-4 sm:right-5 top-1/2 text-[10px] sm:text-xs tracking-[0.2em] text-white/60 sm:text-white/40 font-medium select-none"
                   style={{
-                    transform: 'rotate(-90deg)',
+                    transform: 'translateY(-50%) rotate(-90deg)',
                     transformOrigin: 'center',
                     whiteSpace: 'nowrap',
                   }}
